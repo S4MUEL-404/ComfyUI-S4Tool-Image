@@ -2,7 +2,7 @@
 
 **Author**: S4MUEL404  
 **Website**: [https://s4muel.com](https://s4muel.com)  
-**Version**: 1.0
+**Version**: 1.0.0
 
 ---
 
