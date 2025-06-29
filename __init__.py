@@ -1,3 +1,5 @@
+__version__ = "1.0.0"
+
 print("Loading ComfyUI-S4Tool nodes...")
 
 from .py.ImageCombine import ImageCombine
