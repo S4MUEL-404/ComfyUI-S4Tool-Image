@@ -1,6 +1,7 @@
 import torch
-from PIL import Image, ImageFilter
+from PIL import Image
 import numpy as np
+import cv2
 
 class ImageMaskExpand:
     """
@@ -21,7 +22,7 @@ class ImageMaskExpand:
     RETURN_TYPES = ("MASK",)
     RETURN_NAMES = ("expanded_mask",)
     FUNCTION = "expand_mask"
-    CATEGORY = "\U0001F480S4Tool"
+    CATEGORY = "💀S4Tool"
     OUTPUT_NODE = False
 
     def expand_mask(self, mask, expand_px):
@@ -31,10 +32,14 @@ class ImageMaskExpand:
             arr = arr.cpu().numpy()
         if arr.ndim == 3:
             arr = arr[0]
-        # Always expand white area (mask area)
-        pil_mask = Image.fromarray((arr * 255).astype("uint8"), mode="L")
-        for _ in range(expand_px):
-            pil_mask = pil_mask.filter(ImageFilter.MaxFilter(3))
-        out = np.array(pil_mask).astype("float32") / 255.0
+
+        mask_uint8 = (arr * 255).astype(np.uint8)
+
+        if expand_px > 0:
+            kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (expand_px*2+1, expand_px*2+1))
+            dilated = cv2.dilate(mask_uint8, kernel, iterations=1)
+        else:
+            dilated = mask_uint8
+        out = dilated.astype("float32") / 255.0
         out_tensor = torch.from_numpy(out).unsqueeze(0)
         return (out_tensor,)
