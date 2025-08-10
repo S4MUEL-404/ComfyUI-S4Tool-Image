@@ -1,6 +1,6 @@
 import torch
 import numpy as np
-from PIL import Image, ImageChops
+from PIL import Image
 import copy
 import cv2
 from skimage import img_as_float, img_as_ubyte
@@ -175,6 +175,8 @@ class ImageOverlay:
         
         return offset_x, offset_y
 
+    # Removed stroke and shadow helpers
+
     def blend_images(self, **kwargs):
         # Extract parameters
         Layer_image = kwargs.get("layer image")
@@ -188,6 +190,7 @@ class ImageOverlay:
         blend_mode = kwargs.get("blend_mode", "normal")
         alignment = kwargs.get("alignment", "Top Left")
         Layer_mask = kwargs.get("layer mask (optional)")
+        # No stroke or shadow params
 
         # Convert to PIL image
         background_pil = tensor2pil(Background_image).convert('RGBA')
@@ -247,10 +250,9 @@ class ImageOverlay:
 
         # Composite layers
         comp = copy.copy(background_pil)
-        comp_mask = Image.new("RGB", comp.size, color='black')
-        comp.paste(layer_pil, (x, y))
-        comp_mask.paste(layer_alpha.convert('RGB'), (x, y))
-        comp_mask = comp_mask.convert('L')
+        comp.paste(layer_pil, (x, y), mask=layer_alpha)
+        comp_mask = Image.new('L', comp.size, 0)
+        comp_mask.paste(layer_alpha, (x, y))
 
         # Apply blend mode
         if blend_mode == "normal":
