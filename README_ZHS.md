@@ -52,7 +52,7 @@
    ```
 2. 克隆此仓库：
    ```
-   git clone https://github.com/S4MUEL/ComfyUI-S4Tool-Image.git
+   git clone https://github.com/S4MUEL-404/ComfyUI-S4Tool-Image.git
    ```
 3. 安装依赖包：
    ```

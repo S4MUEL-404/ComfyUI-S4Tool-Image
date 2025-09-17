@@ -52,7 +52,7 @@ A comprehensive image processing toolkit for ComfyUI, providing 20 professional-
    ```
 2. Clone this repository:
    ```
-   git clone https://github.com/S4MUEL/ComfyUI-S4Tool-Image.git
+   git clone https://github.com/S4MUEL-404/ComfyUI-S4Tool-Image.git
    ```
 3. Install dependencies:
    ```
