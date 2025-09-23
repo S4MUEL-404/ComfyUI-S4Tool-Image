@@ -1,5 +1,7 @@
 # Ignore summary_md directory
 summary_md/
+WARP.md
+
 
 # Ignore Python cache files
 __pycache__/

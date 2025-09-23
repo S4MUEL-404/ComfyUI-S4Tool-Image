@@ -13,7 +13,12 @@ scikit-image>=0.19.0
 scipy>=1.8.0
 opencv-contrib-python>=4.5.0
 
-# AI model support (for RMBG-2.0 background removal)
+# AI model support (for RMBG-2.0 background removal and SAM segmentation)
 transformers>=4.20.0
 huggingface_hub>=0.15.0
 safetensors>=0.3.0
+
+# SAM (Segment Anything Model) support
+segment_anything
+timm
+addict

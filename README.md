@@ -1,8 +1,8 @@
 # ComfyUI-S4Tool-Image
 
-**Version: 1.3.0**
+**Version: 1.4.0**
 
-A comprehensive image processing toolkit for ComfyUI, providing 20 professional-grade image manipulation nodes with production-ready quality and reliability.
+A comprehensive image processing toolkit for ComfyUI, providing 21 professional-grade image manipulation nodes with production-ready quality and reliability, including advanced AI-powered segmentation capabilities.
 
 ## 🚀 Features
 
@@ -19,6 +19,7 @@ A comprehensive image processing toolkit for ComfyUI, providing 20 professional-
 - **💀Image Board** - Create image grids and layouts
 - **💀Image Tiling Pattern** - Generate seamless tiling patterns
 - **💀Image RMBG** - Background removal with AI-powered precision
+- **💀Image SAM** - Segment Anything Model with GroundingDINO for intelligent object segmentation
 
 ### Color & Palette Tools
 - **💀Image Color** - Generate solid color images
@@ -58,7 +59,19 @@ A comprehensive image processing toolkit for ComfyUI, providing 20 professional-
    ```
    pip install -r ComfyUI-S4Tool-Image/requirements.txt
    ```
-4. Restart ComfyUI
+4. **⚠️ CRITICAL: Install BERT Model for SAM Node**
+   
+   Navigate to your ComfyUI models directory and install BERT model:
+   ```bash
+   cd ComfyUI/models/
+   git clone https://huggingface.co/google-bert/bert-base-uncased
+   ```
+   
+   **This step is REQUIRED for the 💀Image SAM node to function properly!**
+   
+   Without this model, the SAM functionality will fail. The BERT model is needed for GroundingDINO's text processing capabilities.
+   
+5. Restart ComfyUI
 
 ## 🔧 Dependencies
 
@@ -66,9 +79,25 @@ The plugin automatically manages its dependencies and provides detailed startup 
 - **Pillow** (PIL) - Core image processing
 - **NumPy** - Numerical operations
 - **Requests** - URL image loading
-- **Additional AI libraries** - Background removal and advanced features
+- **AI Model Libraries** - Background removal, SAM segmentation, and GroundingDINO
+- **Segment Anything** - Advanced object segmentation
+- **Transformers** - BERT and neural network support
 
-All dependencies are automatically checked at startup with production-quality validation.
+### ⚠️ **CRITICAL REQUIREMENT: BERT Model for SAM**
+
+For the **💀Image SAM** node to work, you **MUST** install the BERT model manually:
+
+```bash
+cd ComfyUI/models/
+git clone https://huggingface.co/google-bert/bert-base-uncased
+```
+
+**Why is this required?**
+- GroundingDINO (used by SAM) requires BERT for natural language processing
+- The model enables text-based object detection and segmentation
+- Without it, SAM functionality will completely fail
+
+All other dependencies are automatically checked at startup with production-quality validation.
 
 ## 📖 Usage
 
@@ -88,7 +117,7 @@ All dependencies are automatically checked at startup with production-quality va
 - ✅ **Production Quality** - Enterprise-grade error handling and validation
 - ✅ **Comprehensive Logging** - Detailed operation tracking and debugging
 - ✅ **Automatic Dependencies** - Smart dependency management and validation
-- ✅ **Professional Tools** - 20 specialized image processing nodes
+- ✅ **Professional Tools** - 21 specialized image processing nodes
 - ✅ **High Performance** - Optimized algorithms for speed and quality
 - ✅ **User Friendly** - Intuitive node interfaces with helpful defaults
 
@@ -117,4 +146,4 @@ This project is open source. Please respect the licensing terms.
 
 **Author:** S4MUEL  
 **Website:** [s4muel.com](https://s4muel.com)  
-**Version:** 1.3.0
+**Version:** 1.4.0

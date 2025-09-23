@@ -142,6 +142,24 @@ class DependencyManager:
             'description': 'SafeTensors - Secure and fast model weight loading',
             'install_cmd': 'pip install safetensors>=0.3.0',
             'features': ['RMBG Model Weights', 'Secure Loading', 'Performance Optimization']
+        },
+        'segment_anything': {
+            'package': 'segment_anything',
+            'description': 'Segment Anything Model - Core SAM functionality',
+            'install_cmd': 'pip install segment_anything',
+            'features': ['SAM Segmentation', 'Model Loading', 'Image Processing']
+        },
+        'timm': {
+            'package': 'timm',
+            'description': 'PyTorch Image Models - Vision transformer support',
+            'install_cmd': 'pip install timm',
+            'features': ['Vision Transformers', 'Model Registry', 'Pretrained Models']
+        },
+        'addict': {
+            'package': 'addict',
+            'description': 'Dictionary subclass for nested attributes',
+            'install_cmd': 'pip install addict',
+            'features': ['Configuration Management', 'Nested Attributes', 'Dictionary Extensions']
         }
     }
     

@@ -1,4 +1,4 @@
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 
 # Import dependency manager first
 from .dependency_manager import check_startup_dependencies, S4ToolLogger
@@ -34,6 +34,7 @@ from .py.imageToBase64 import ImageToBase64
 from .py.imageTilingPattern import ImageTilingPattern
 from .py.imageGetColor import ImageGetColor
 from .py.imageRMBG import ImageRMBG
+from .py.imageSAM import ImageSAM
 
 NODE_CLASS_MAPPINGS = {
     "ImageColorPicker": ImageColorPicker,
@@ -57,6 +58,7 @@ NODE_CLASS_MAPPINGS = {
     "ImageTilingPattern": ImageTilingPattern,
     "ImageGetColor": ImageGetColor,
     "ImageRMBG": ImageRMBG,
+    "ImageSAM": ImageSAM,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -81,6 +83,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageTilingPattern": "💀Image Tiling Pattern",
     "ImageGetColor": "💀Image Get Color",
     "ImageRMBG": "💀Image RMBG",
+    "ImageSAM": "💀Image SAM",
 }
 
 WEB_DIRECTORY = "./web"

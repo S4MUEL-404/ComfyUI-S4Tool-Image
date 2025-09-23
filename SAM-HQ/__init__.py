@@ -1,0 +1,1 @@
+# SAM-HQ module initialization

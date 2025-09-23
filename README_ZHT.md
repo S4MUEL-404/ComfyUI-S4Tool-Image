@@ -1,8 +1,8 @@
 # ComfyUI-S4Tool-Image
 
-**版本: 1.3.0**
+**版本: 1.4.0**
 
-專為 ComfyUI 設計的綜合圖像處理工具包，提供 20 個專業級圖像處理節點，具備生產級品質和可靠性。
+ComfyUI 的綜合圖像處理工具包，提供 21 個專業級圖像處理節點，具備生產級品質和可靠性，包含先進的 AI 驅動分割功能。
 
 ## 🚀 功能特色
 
@@ -19,6 +19,7 @@
 - **💀Image Board** - 建立圖像網格和佈局
 - **💀Image Tiling Pattern** - 生成無縫拼接圖案
 - **💀Image RMBG** - AI 驅動的高精度背景移除
+- **💀Image SAM** - Segment Anything Model 結合 GroundingDINO 的智慧物件分割
 
 ### 顏色和調色板工具
 - **💀Image Color** - 生成純色圖像
@@ -58,7 +59,19 @@
    ```
    pip install -r ComfyUI-S4Tool-Image/requirements.txt
    ```
-4. 重新啟動 ComfyUI
+4. **⚠️ 重要：為 SAM 節點安裝 BERT 模型**
+   
+   導航至 ComfyUI 模型目錄並安裝 BERT 模型：
+   ```bash
+   cd ComfyUI/models/
+   git clone https://huggingface.co/google-bert/bert-base-uncased
+   ```
+   
+   **此步驟對於 💀Image SAM 節點的正常運作是必需的！**
+   
+   沒有此模型，SAM 功能將無法正常工作。BERT 模型用於 GroundingDINO 的文字處理功能。
+   
+5. 重新啟動 ComfyUI
 
 ## 🔧 相依套件
 
@@ -66,9 +79,25 @@
 - **Pillow** (PIL) - 核心圖像處理
 - **NumPy** - 數值運算
 - **Requests** - URL 圖像載入
-- **其他 AI 函式庫** - 背景移除和進階功能
+- **AI 模型函式庫** - 背景移除、SAM 分割和 GroundingDINO
+- **Segment Anything** - 進階物件分割
+- **Transformers** - BERT 和神經網絡支援
 
-所有相依套件在啟動時都會進行生產級品質驗證。
+### ⚠️ **關鍵要求：SAM 的 BERT 模型**
+
+為了讓 **💀Image SAM** 節點正常工作，您 **必須** 手動安裝 BERT 模型：
+
+```bash
+cd ComfyUI/models/
+git clone https://huggingface.co/google-bert/bert-base-uncased
+```
+
+**為什麼需要這個？**
+- GroundingDINO（SAM 使用）需要 BERT 來進行自然語言處理
+- 此模型支援基於文字的物件檢測和分割
+- 沒有它，SAM 功能將完全無法使用
+
+其他所有相依套件在啟動時都會進行生產級品質驗證。
 
 ## 📖 使用方法
 
@@ -88,7 +117,7 @@
 - ✅ **生產品質** - 企業級錯誤處理和驗證
 - ✅ **全面日誌** - 詳細的操作追蹤和偵錯
 - ✅ **自動相依管理** - 智慧相依套件管理和驗證
-- ✅ **專業工具** - 20 個專業圖像處理節點
+- ✅ **專業工具** - 21 個專業圖像處理節點
 - ✅ **高效能** - 優化演算法，兼顧速度和品質
 - ✅ **使用者友善** - 直觀的節點介面，預設值合理
 
@@ -117,4 +146,4 @@ ComfyUI-S4Tool-Image/
 
 **作者:** S4MUEL  
 **網站:** [s4muel.com](https://s4muel.com)  
-**版本:** 1.3.0
+**版本:** 1.4.0
