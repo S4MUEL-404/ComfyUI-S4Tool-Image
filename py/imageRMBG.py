@@ -340,6 +340,8 @@ class RMBG20Loader:
         S4ToolLogger.info("RMBG", "Inference started: {total} image(s), res={process_res}, sensitivity={sensitivity:.2f}")
         for idx, img in enumerate(images, start=1):
             pil_img = _tensor_to_pil(img)
+            # Force convert to RGB to ensure 3-channel input for model
+            pil_img = pil_img.convert('RGB')
             orig_sizes.append(pil_img.size)
             input_tensors.append(tfm(pil_img).unsqueeze(0))
             S4ToolLogger.info("RMBG", "Preprocess {idx}/{total} done (size={pil_img.size})")
