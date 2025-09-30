@@ -22,3 +22,6 @@ safetensors>=0.3.0
 segment_anything
 timm
 addict
+
+# SAM2 (Segment Anything Model 2) support
+pyyaml>=6.0

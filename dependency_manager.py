@@ -160,6 +160,13 @@ class DependencyManager:
             'description': 'Dictionary subclass for nested attributes',
             'install_cmd': 'pip install addict',
             'features': ['Configuration Management', 'Nested Attributes', 'Dictionary Extensions']
+        },
+        'yaml': {
+            'package': 'pyyaml',
+            'import_name': 'yaml',
+            'description': 'PyYAML - YAML configuration file parser',
+            'install_cmd': 'pip install pyyaml>=6.0',
+            'features': ['SAM2 Configuration', 'YAML Parsing', 'Config Management']
         }
     }
     

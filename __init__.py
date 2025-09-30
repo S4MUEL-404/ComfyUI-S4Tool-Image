@@ -35,6 +35,7 @@ from .py.imageTilingPattern import ImageTilingPattern
 from .py.imageGetColor import ImageGetColor
 from .py.imageRMBG import ImageRMBG
 from .py.imageSAM import ImageSAM
+from .py.imageSAM2 import ImageSAM2
 
 NODE_CLASS_MAPPINGS = {
     "ImageColorPicker": ImageColorPicker,
@@ -59,6 +60,7 @@ NODE_CLASS_MAPPINGS = {
     "ImageGetColor": ImageGetColor,
     "ImageRMBG": ImageRMBG,
     "ImageSAM": ImageSAM,
+    "ImageSAM2": ImageSAM2,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -84,6 +86,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageGetColor": "💀Image Get Color",
     "ImageRMBG": "💀Image RMBG",
     "ImageSAM": "💀Image SAM",
+    "ImageSAM2": "💀Image SAM2",
 }
 
 WEB_DIRECTORY = "./web"
