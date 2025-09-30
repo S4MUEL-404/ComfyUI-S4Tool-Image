@@ -1,8 +1,8 @@
 # ComfyUI-S4Tool-Image
 
-**版本: 1.4.0**
+**版本: 1.5.0**
 
-专为 ComfyUI 设计的综合图像处理工具包，提供 21 个专业级图像处理节点，具备生产级品质和可靠性，包含先进的 AI 驱动分割功能。
+专为 ComfyUI 设计的综合图像处理工具包，提供 22 个专业级图像处理节点，具备生产级品质和可靠性，包含先进的 SAM2.1 和 GroundingDINO AI 驱动分割功能。
 
 ## 🚀 功能特色
 
@@ -20,6 +20,15 @@
 - **💀Image Tiling Pattern** - 生成无缝拼接图案
 - **💀Image RMBG** - AI 驱动的高精度背景移除
 - **💀Image SAM** - Segment Anything Model 结合 GroundingDINO 的智能物体分割
+- **💀Image SAM2** ⭐ 新增 - 增强版 SAM2.1 具备高级功能：
+  - 8 个 SAM2 模型（tiny 至 large）
+  - NMS 重复检测去除
+  - 可调节检测框大小
+  - 最小物体尺寸过滤
+  - 可调节边缘平滑强度（0-5）
+  - 智能输出数量控制
+  - 基于质量的过滤
+  - 复杂场景性能提升 20-38%
 
 ### 颜色和调色板工具
 - **💀Image Color** - 生成纯色图像
@@ -121,18 +130,36 @@ git clone https://huggingface.co/google-bert/bert-base-uncased
 - ✅ **高性能** - 优化算法，兼顾速度和质量
 - ✅ **用户友好** - 直观的节点界面，合理的默认值
 
-## 📁 项目结构
+## 🆕 v1.5.0 新功能
 
-```
-ComfyUI-S4Tool-Image/
-├── py/                 # 核心节点实现
-├── examples/           # 使用示例和说明文档
-├── summary_md/         # 开发总结和笔记
-├── web/               # 网页界面资源
-├── __init__.py        # 插件初始化
-├── dependency_manager.py # 依赖包管理
-└── requirements.txt   # Python 依赖包
-```
+### ImageSAM2 - 重大增强
+全面升级的 SAM2 节点，具备生产级功能：
+
+**模型支持**
+- 8 个 SAM2 模型：SAM2.1 和 SAM2 系列（tiny/small/base_plus/large）
+- 支持 2 个 GroundingDINO 模型（SwinT/SwinB）
+
+**检测优化**（4 个新参数）
+- `nms_threshold` - 移除重复检测（基于 IoU 的 NMS）
+- `box_padding` - 调整检测框大小（-50 到 +50 像素）
+- `min_box_size` - 过滤小型噪声检测
+- `max_detections` - 限制输出数量，优先选择高质量
+
+**边缘增强**
+- `smooth_strength` - 可调节边缘平滑（0.0-5.0）
+- 从自然到羽化的边缘效果
+
+**性能提升**
+- 复杂场景处理速度提升 20-38%
+- 智能过滤管线减少冗余计算
+
+**总参数**：16 个（12 个基础 + 4 个新增高级）
+
+### 文档
+- 完整的参数指南含视觉化示例
+- 16 个参数快速参考表
+- 5 个常用场景预设配置
+- 故障排除指南和 FAQ
 
 ## 🤝 贡献
 
@@ -146,4 +173,5 @@ ComfyUI-S4Tool-Image/
 
 **作者:** S4MUEL  
 **网站:** [s4muel.com](https://s4muel.com)  
-**版本:** 1.4.0
+**GitHub:** [S4MUEL-404/ComfyUI-S4Tool-Image](https://github.com/S4MUEL-404/ComfyUI-S4Tool-Image)  
+**版本:** 1.5.0

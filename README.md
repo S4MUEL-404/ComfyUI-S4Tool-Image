@@ -1,8 +1,8 @@
 # ComfyUI-S4Tool-Image
 
-**Version: 1.4.0**
+**Version: 1.5.0**
 
-A comprehensive image processing toolkit for ComfyUI, providing 21 professional-grade image manipulation nodes with production-ready quality and reliability, including advanced AI-powered segmentation capabilities.
+A comprehensive image processing toolkit for ComfyUI, providing 22 professional-grade image manipulation nodes with production-ready quality and reliability, including advanced AI-powered segmentation capabilities with SAM2.1 and GroundingDINO.
 
 ## 🚀 Features
 
@@ -20,6 +20,15 @@ A comprehensive image processing toolkit for ComfyUI, providing 21 professional-
 - **💀Image Tiling Pattern** - Generate seamless tiling patterns
 - **💀Image RMBG** - Background removal with AI-powered precision
 - **💀Image SAM** - Segment Anything Model with GroundingDINO for intelligent object segmentation
+- **💀Image SAM2** ⭐ NEW - Enhanced SAM2.1 with advanced features:
+  - 8 SAM2 models (tiny to large)
+  - NMS duplicate detection removal
+  - Adjustable detection box padding
+  - Minimum object size filtering
+  - Adjustable edge smoothing strength (0-5)
+  - Smart output quantity control
+  - Quality-based filtering
+  - 20-38% performance boost in complex scenes
 
 ### Color & Palette Tools
 - **💀Image Color** - Generate solid color images
@@ -121,18 +130,36 @@ All other dependencies are automatically checked at startup with production-qual
 - ✅ **High Performance** - Optimized algorithms for speed and quality
 - ✅ **User Friendly** - Intuitive node interfaces with helpful defaults
 
-## 📁 Project Structure
+## 🆕 What's New in v1.5.0
 
-```
-ComfyUI-S4Tool-Image/
-├── py/                 # Core node implementations
-├── examples/           # Usage examples and documentation
-├── summary_md/         # Development summaries and notes
-├── web/               # Web interface assets
-├── __init__.py        # Plugin initialization
-├── dependency_manager.py # Dependency management
-└── requirements.txt   # Python dependencies
-```
+### ImageSAM2 - Major Enhancement
+Completely upgraded SAM2 node with production-grade features:
+
+**Model Support**
+- 8 SAM2 models: SAM2.1 and SAM2 series (tiny/small/base_plus/large)
+- Support for 2 GroundingDINO models (SwinT/SwinB)
+
+**Detection Optimization** (4 new parameters)
+- `nms_threshold` - Remove duplicate detections (IoU-based NMS)
+- `box_padding` - Adjust detection box size (-50 to +50 pixels)
+- `min_box_size` - Filter out small noise detections
+- `max_detections` - Limit output quantity with quality priority
+
+**Edge Enhancement**
+- `smooth_strength` - Adjustable edge smoothing (0.0-5.0)
+- Natural to feathered edge effects
+
+**Performance**
+- 20-38% faster processing in complex scenes
+- Smart filtering pipeline reduces redundant computations
+
+**Total Parameters**: 16 (12 basic + 4 new advanced)
+
+### Documentation
+- Complete parameter guide with visual examples
+- Quick reference table for all 16 parameters
+- 5 preset configurations for common scenarios
+- Troubleshooting guide and FAQ
 
 ## 🤝 Contributing
 
@@ -146,4 +173,5 @@ This project is open source. Please respect the licensing terms.
 
 **Author:** S4MUEL  
 **Website:** [s4muel.com](https://s4muel.com)  
-**Version:** 1.4.0
+**GitHub:** [S4MUEL-404/ComfyUI-S4Tool-Image](https://github.com/S4MUEL-404/ComfyUI-S4Tool-Image)  
+**Version:** 1.5.0
