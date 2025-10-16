@@ -108,25 +108,42 @@ def get_bert_base_uncased_model_path():
     return 'bert-base-uncased'
 
 def get_local_filepath(url, dirname, local_file_name=None):
-    """Download or get local file path"""
+    """Download or get local file path - works with any ComfyUI installation"""
     if not local_file_name:
         parsed_url = urlparse(url)
         local_file_name = os.path.basename(parsed_url.path)
 
-    destination = folder_paths.get_full_path(dirname, local_file_name)
-    if destination:
-        S4ToolLogger.info("ImageSAM2", f"Using existing model: {destination}")
-        return destination
-
-    folder = os.path.join(folder_paths.models_dir, dirname)
+    # Get models directory from ComfyUI configuration (works for any installation path)
+    try:
+        models_base = folder_paths.models_dir
+    except Exception as e:
+        S4ToolLogger.error("ImageSAM2", f"Cannot access ComfyUI models directory: {e}")
+        raise RuntimeError(f"ComfyUI models directory not accessible: {e}")
+    
+    folder = os.path.join(models_base, dirname)
     if not os.path.exists(folder):
-        os.makedirs(folder)
+        os.makedirs(folder, exist_ok=True)
+        S4ToolLogger.info("ImageSAM2", f"Created models directory: {folder}")
 
     destination = os.path.join(folder, local_file_name)
-    if not os.path.exists(destination):
-        S4ToolLogger.info("ImageSAM2", f"Downloading {url} to {destination}")
+    
+    # Check if file already exists
+    if os.path.exists(destination):
+        S4ToolLogger.info("ImageSAM2", f"Using existing model: {destination}")
+        return destination
+    
+    # Download if file doesn't exist
+    S4ToolLogger.info("ImageSAM2", f"Downloading {url} to {destination}")
+    try:
         download_url_to_file(url, destination)
-    return destination
+        if os.path.exists(destination):
+            S4ToolLogger.success("ImageSAM2", f"Successfully downloaded: {destination}")
+            return destination
+        else:
+            raise FileNotFoundError(f"Download completed but file not found: {destination}")
+    except Exception as e:
+        S4ToolLogger.error("ImageSAM2", f"Failed to download {url}: {str(e)}")
+        raise RuntimeError(f"Model download failed: {str(e)}")
 
 def load_sam2_model_wrapper(model_name):
     """Load SAM2 model from configuration"""
@@ -180,28 +197,38 @@ def load_sam2_model_wrapper(model_name):
 def load_groundingdino_model(model_name):
     """Load GroundingDINO model from configuration"""
     S4ToolLogger.info("ImageSAM2", f"Loading GroundingDINO model: {model_name}")
-    dino_model_args = local_groundingdino_SLConfig.fromfile(
-        get_local_filepath(
-            groundingdino_model_list[model_name]["config_url"],
-            groundingdino_model_dir_name
-        ),
+    
+    # Get and ensure config file exists
+    config_path = get_local_filepath(
+        groundingdino_model_list[model_name]["config_url"],
+        groundingdino_model_dir_name
     )
-
+    
+    # Load model configuration
+    dino_model_args = local_groundingdino_SLConfig.fromfile(config_path)
+    
     if dino_model_args.text_encoder_type == 'bert-base-uncased':
         dino_model_args.text_encoder_type = get_bert_base_uncased_model_path()
     
+    # Build model
     dino = local_groundingdino_build_model(dino_model_args)
-    checkpoint = torch.load(
-        get_local_filepath(
-            groundingdino_model_list[model_name]["model_url"],
-            groundingdino_model_dir_name,
-        ),
+    
+    # Get and ensure model file exists
+    model_path = get_local_filepath(
+        groundingdino_model_list[model_name]["model_url"],
+        groundingdino_model_dir_name,
     )
+    
+    # Load checkpoint
+    checkpoint = torch.load(model_path, map_location='cpu')
     dino.load_state_dict(local_groundingdino_clean_state_dict(
         checkpoint['model']), strict=False)
+    
+    # Move to device and set to eval mode
     device = comfy.model_management.get_torch_device()
     dino.to(device=device)
     dino.eval()
+    
     S4ToolLogger.success("ImageSAM2", f"GroundingDINO model loaded successfully: {model_name}")
     return dino
 
