@@ -22,9 +22,11 @@ from .py.imageCroptoFit import ImageCropToFit
 from .py.imageColor import ImageColor
 from .py.imageBoard import ImageBoard
 from .py.imageAdjustment import ImageAdjustment
+from .py.imageAdjustmentColor import ImageAdjustmentColor
 from .py.imageOverlay import ImageOverlay
 from .py.imagePalette import ImagePalette
 from .py.imagePalette631 import ImagePalette631
+from .py.imagePaletteContrary import ImagePaletteContrary
 from .py.imagePrimaryColor import ImagePrimaryColor
 from .py.imageFromBase64 import ImageFromBase64
 from .py.imageFromURL import ImageFromURL
@@ -47,9 +49,11 @@ NODE_CLASS_MAPPINGS = {
     "ImageColor": ImageColor,
     "ImageBoard": ImageBoard,
     "ImageAdjustment": ImageAdjustment,
+    "ImageAdjustmentColor": ImageAdjustmentColor,
     "ImageOverlay": ImageOverlay,
     "ImagePalette": ImagePalette,
     "ImagePalette631": ImagePalette631,
+    "ImagePaletteContrary": ImagePaletteContrary,
     "ImagePrimaryColor": ImagePrimaryColor,
     "ImageFromBase64": ImageFromBase64,
     "ImageFromURL": ImageFromURL,
@@ -73,9 +77,11 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageColor": "💀Image Color",
     "ImageBoard": "💀Image Board",
     "ImageAdjustment": "💀Image Adjustment",
+    "ImageAdjustmentColor": "💀Image Adjustment Color",
     "ImageOverlay": "💀Image Overlay",
     "ImagePalette": "💀Image Palette",
     "ImagePalette631": "💀Image Palette 6-3-1",
+    "ImagePaletteContrary": "💀Image Palette Contrary",
     "ImagePrimaryColor": "💀Image Primary Color",
     "ImageFromBase64": "💀Image from Base64",
     "ImageFromURL": "💀Image from URL",
