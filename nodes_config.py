@@ -338,7 +338,7 @@ class ImageConstants:
     """Constants for consistent image processing."""
     PALETTE_BLOCK_WIDTH = 400
     PALETTE_BLOCK_HEIGHT = 80
-    COLOR_EXTRACTION_RESIZE = (128, 128)
+    COLOR_EXTRACTION_RESIZE = (512, 512)
     MAX_IMAGE_SIZE = 4096
 
 # Professional-grade image processing using OpenCV + PIL

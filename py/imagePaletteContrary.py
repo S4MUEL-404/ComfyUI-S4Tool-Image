@@ -218,11 +218,13 @@ class ImagePaletteContrary(BaseColorExtractionNode):
     @staticmethod
     def adjust_color_strength(color, strength, is_contrary_color=False):
         """
-        Adjust color strength to match ImageEnhance.Brightness behavior.
-        - strength = 1.0 equals brightness = 100 (factor 2.0)
-        - strength = -1.0 equals brightness = -100 (factor 0.0)
-        - For bright colors: positive strength makes brighter, negative makes darker
-        - For dark colors: positive strength makes darker, negative makes brighter
+        Adjust color brightness to match Image Adjustment Color brightness behavior exactly.
+        
+        Logic:
+        - For bright colors: strength -1 to 1 maps to brightness -100 to 100
+        - For dark colors: strength -1 to 1 maps to brightness 100 to -100 (inverted)
+        
+        This ensures positive strength enhances each color's nature.
         """
         if strength == 0.0:
             return color
@@ -231,49 +233,38 @@ class ImagePaletteContrary(BaseColorExtractionNode):
         brightness = ImagePaletteContrary.get_brightness(color)
         
         # Determine if color is bright or dark
-        # Use a more reasonable threshold - colors below 0.5 are considered dark
-        brightness_threshold = 0.5  # Colors below 0.5 brightness are "dark", above 0.5 are "bright"
+        brightness_threshold = 0.8  # Only colors above 0.8 brightness are "bright", most colors are "dark"
         is_bright = brightness > brightness_threshold
         
         S4ToolLogger.info("ImagePaletteContrary", f"Brightness analysis: {brightness:.3f} vs threshold {brightness_threshold} -> {'BRIGHT' if is_bright else 'DARK'}")
         
-        # Convert color to PIL Image for consistent processing with ImageAdjustment
+        # Convert strength (-1 to 1) to brightness (-100 to 100) based on color type
+        if is_bright:
+            # Bright colors: strength -1 to 1 → brightness -100 to 100 (normal mapping)
+            brightness_value = strength * 100
+        else:
+            # Dark colors: strength -1 to 1 → brightness 100 to -100 (inverted mapping)
+            brightness_value = -strength * 100
+        
+        # Create 1x1 PIL image for processing (same as Image Adjustment Color)
         color_image = Image.new('RGB', (1, 1), tuple(color))
         
-        # SIMPLIFIED LOGIC: Use a fixed, reasonable multiplier instead of complex dynamic calculation
-        base_multiplier = 50  # Much smaller, more predictable multiplier
-        
-        # User expected logic: positive strength enhances the color's nature
-        # For bright colors: positive = brighter, negative = darker  
-        # For dark colors: positive = darker, negative = brighter
-        # 
-        # PIL behavior: factor > 1.0 = brighter, factor < 1.0 = darker
-        if is_bright:
-            # Bright colors: positive strength makes them brighter (factor > 1.0)
-            brightness_value = strength * base_multiplier  # positive -> factor > 1.0 -> brighter
-        else:
-            # Dark colors: positive strength makes them darker (factor < 1.0)
-            brightness_value = -strength * base_multiplier  # positive strength -> negative value -> factor < 1.0 -> darker
-        
-        # No need to limit since we're using a reasonable base_multiplier
-        
+        # Apply brightness adjustment using PIL ImageEnhance.Brightness (same as Image Adjustment Color)
         brightness_factor = 1.0 + (brightness_value / 100.0)
-        brightness_factor = max(0.1, min(3.0, brightness_factor))  # Limit factor to 0.1-3.0
+        brightness_factor = max(0.0, brightness_factor)  # Ensure non-negative
         
-        # Apply PIL ImageEnhance.Brightness
         from PIL import ImageEnhance
         enhancer = ImageEnhance.Brightness(color_image)
         adjusted_image = enhancer.enhance(brightness_factor)
         
-        # Extract the adjusted color
+        # Extract adjusted color
         adjusted_rgb = adjusted_image.getpixel((0, 0))
+        adjusted_color = np.array(adjusted_rgb, dtype=np.uint8)
         
         # Store debug info
-        S4ToolLogger.info("ImagePaletteContrary", f"Color adjustment - Original: #{color[0]:02X}{color[1]:02X}{color[2]:02X}, Brightness: {brightness:.3f} ({'bright' if is_bright else 'dark'}), Strength: {strength:.2f}, Contrary: {is_contrary_color}")
-        S4ToolLogger.info("ImagePaletteContrary", f"PIL Brightness - Value: {brightness_value:.1f}, Factor: {brightness_factor:.3f}, Base Multiplier: {base_multiplier}")
-        S4ToolLogger.info("ImagePaletteContrary", f"Result: #{adjusted_rgb[0]:02X}{adjusted_rgb[1]:02X}{adjusted_rgb[2]:02X}")
-        
-        adjusted_color = np.array(adjusted_rgb, dtype=np.uint8)
+        S4ToolLogger.info("ImagePaletteContrary", f"Color adjustment - Original: #{color[0]:02X}{color[1]:02X}{color[2]:02X}, Brightness: {brightness:.3f} ({'bright' if is_bright else 'dark'})")
+        S4ToolLogger.info("ImagePaletteContrary", f"Strength: {strength:.2f} -> Brightness value: {brightness_value:.0f} -> Factor: {brightness_factor:.3f}")
+        S4ToolLogger.info("ImagePaletteContrary", f"Result: #{adjusted_color[0]:02X}{adjusted_color[1]:02X}{adjusted_color[2]:02X}")
         
         return adjusted_color
     
