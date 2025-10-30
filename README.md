@@ -1,8 +1,8 @@
 # ComfyUI-S4Tool-Image
 
-**Version: 1.5.0**
+**Version: 1.6.0**
 
-A comprehensive image processing toolkit for ComfyUI, providing 22 professional-grade image manipulation nodes with production-ready quality and reliability, including advanced AI-powered segmentation capabilities with SAM2.1 and GroundingDINO.
+A comprehensive image processing toolkit for ComfyUI, providing 23 professional-grade image manipulation nodes with production-ready quality and reliability, including advanced AI-powered segmentation capabilities with SAM2.1 and GroundingDINO.
 
 ## 🚀 Features
 
@@ -15,6 +15,7 @@ A comprehensive image processing toolkit for ComfyUI, providing 22 professional-
 
 ### Advanced Effects
 - **💀Image Blend With Alpha** - Advanced alpha blending with multiple modes
+- **💀Image Remove Alpha** - Convert RGBA images to RGB with customizable background color
 - **💀Image Overlay** - Layer images with positioning and transformation controls
 - **💀Image Board** - Create image grids and layouts
 - **💀Image Tiling Pattern** - Generate seamless tiling patterns
@@ -126,9 +127,18 @@ All other dependencies are automatically checked at startup with production-qual
 - ✅ **Production Quality** - Enterprise-grade error handling and validation
 - ✅ **Comprehensive Logging** - Detailed operation tracking and debugging
 - ✅ **Automatic Dependencies** - Smart dependency management and validation
-- ✅ **Professional Tools** - 21 specialized image processing nodes
+- ✅ **Professional Tools** - 23 specialized image processing nodes
 - ✅ **High Performance** - Optimized algorithms for speed and quality
 - ✅ **User Friendly** - Intuitive node interfaces with helpful defaults
+
+## 🆕 What's New in v1.6.0
+
+### New Node: Image Remove Alpha
+- Convert RGBA images to RGB format
+- Remove alpha channel from images or image sequences
+- Customizable background color for transparent areas (hex color format)
+- Proper alpha blending with background
+- Batch processing support
 
 ## 🆕 What's New in v1.5.0
 
@@ -174,4 +184,4 @@ This project is open source. Please respect the licensing terms.
 **Author:** S4MUEL  
 **Website:** [s4muel.com](https://s4muel.com)  
 **GitHub:** [S4MUEL-404/ComfyUI-S4Tool-Image](https://github.com/S4MUEL-404/ComfyUI-S4Tool-Image)  
-**Version:** 1.5.0
+**Version:** 1.6.0

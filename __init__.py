@@ -1,4 +1,4 @@
-__version__ = "1.4.0"
+__version__ = "1.6.0"
 
 # Import dependency manager first
 from .dependency_manager import check_startup_dependencies, S4ToolLogger
@@ -38,6 +38,7 @@ from .py.imageGetColor import ImageGetColor
 from .py.imageRMBG import ImageRMBG
 from .py.imageSAM import ImageSAM
 from .py.imageSAM2 import ImageSAM2
+from .py.imageRemoveAlpha import ImageRemoveAlpha
 
 NODE_CLASS_MAPPINGS = {
     "ImageColorPicker": ImageColorPicker,
@@ -65,6 +66,7 @@ NODE_CLASS_MAPPINGS = {
     "ImageRMBG": ImageRMBG,
     "ImageSAM": ImageSAM,
     "ImageSAM2": ImageSAM2,
+    "ImageRemoveAlpha": ImageRemoveAlpha,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -93,6 +95,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ImageRMBG": "💀Image RMBG",
     "ImageSAM": "💀Image SAM",
     "ImageSAM2": "💀Image SAM2",
+    "ImageRemoveAlpha": "💀Image Remove Alpha",
 }
 
 WEB_DIRECTORY = "./web"

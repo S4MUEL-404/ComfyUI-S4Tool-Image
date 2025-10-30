@@ -1,8 +1,8 @@
 # ComfyUI-S4Tool-Image
 
-**版本: 1.5.0**
+**版本: 1.6.0**
 
-ComfyUI 的綜合圖像處理工具包，提供 22 個專業級圖像處理節點，具備生產級品質和可靠性，包含先進的 SAM2.1 和 GroundingDINO AI 驅動分割功能。
+ComfyUI 的綜合圖像處理工具包,提供 23 個專業級圖像處理節點,具備生產級品質和可靠性,包含先進的 SAM2.1 和 GroundingDINO AI 驅動分割功能。
 
 ## 🚀 功能特色
 
@@ -14,8 +14,9 @@ ComfyUI 的綜合圖像處理工具包，提供 22 個專業級圖像處理節�
 - **💀Image Adjustment** - 專業色彩和色調調整
 
 ### 進階效果
-- **💀Image Blend With Alpha** - 進階 Alpha 混合，支援多種模式
-- **💀Image Overlay** - 圖像疊加，支援定位和變換控制
+- **💀Image Blend With Alpha** - 進階 Alpha 混合,支援多種模式
+- **💀Image Remove Alpha** - 將 RGBA 圖像轉換為 RGB,可自訂背景顏色
+- **💀Image Overlay** - 圖像疊加,支援定位和變換控制
 - **💀Image Board** - 建立圖像網格和佈局
 - **💀Image Tiling Pattern** - 生成無縫拼接圖案
 - **💀Image RMBG** - AI 驅動的高精度背景移除
@@ -126,14 +127,23 @@ git clone https://huggingface.co/google-bert/bert-base-uncased
 - ✅ **生產品質** - 企業級錯誤處理和驗證
 - ✅ **全面日誌** - 詳細的操作追蹤和偵錯
 - ✅ **自動相依管理** - 智慧相依套件管理和驗證
-- ✅ **專業工具** - 21 個專業圖像處理節點
-- ✅ **高效能** - 優化演算法，兼顧速度和品質
-- ✅ **使用者友善** - 直觀的節點介面，預設值合理
+- ✅ **專業工具** - 23 個專業圖像處理節點
+- ✅ **高效能** - 優化演算法,兼顧速度和品質
+- ✅ **使用者友善** - 直觀的節點介面,預設值合理
+
+## 🆕 v1.6.0 新功能
+
+### 新增節點: Image Remove Alpha
+- 將 RGBA 圖像轉換為 RGB 格式
+- 從圖像或圖像序列中移除 alpha 通道
+- 可自訂透明區域的背景顏色(16進制顏色格式)
+- 正確的 alpha 混合背景處理
+- 支援批次處理
 
 ## 🆕 v1.5.0 新功能
 
 ### ImageSAM2 - 重大增強
-全面升級的 SAM2 節點，具備生產級功能：
+全面升級的 SAM2 節點,具備生產級功能:
 
 **模型支援**
 - 8 個 SAM2 模型：SAM2.1 和 SAM2 系列（tiny/small/base_plus/large）
@@ -174,4 +184,4 @@ git clone https://huggingface.co/google-bert/bert-base-uncased
 **作者:** S4MUEL  
 **網站:** [s4muel.com](https://s4muel.com)  
 **GitHub:** [S4MUEL-404/ComfyUI-S4Tool-Image](https://github.com/S4MUEL-404/ComfyUI-S4Tool-Image)  
-**版本:** 1.5.0
+**版本:** 1.6.0
