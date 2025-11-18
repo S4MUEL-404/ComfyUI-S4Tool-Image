@@ -23,6 +23,10 @@ class ImageTilingPattern:
                 "rotation": ("FLOAT", {"default": 0.0, "min": 0.0, "max": 360.0, "step": 1.0}),
                 "scale": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 10.0, "step": 0.01}),
                 "opacity": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 1.0, "step": 0.01}),
+                "padding_top": ("INT", {"default": 0, "min": 0, "max": 2048, "step": 1}),
+                "padding_right": ("INT", {"default": 0, "min": 0, "max": 2048, "step": 1}),
+                "padding_bottom": ("INT", {"default": 0, "min": 0, "max": 2048, "step": 1}),
+                "padding_left": ("INT", {"default": 0, "min": 0, "max": 2048, "step": 1}),
                 "randomize_scale": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1, "display": "slider"}),
                 "randomize_rotation": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1, "display": "slider"}),
                 "randomize_opacity": ("INT", {"default": 0, "min": 0, "max": 100, "step": 1, "display": "slider"}),
@@ -39,14 +43,14 @@ class ImageTilingPattern:
     FUNCTION = "tile_pattern"
     CATEGORY = "💀S4Tool"
 
-    def tile_pattern(self, image, width, height, spacing, offset, rotation, scale, opacity, randomize_scale=0, randomize_rotation=0, randomize_opacity=0, image2=None, image3=None, image4=None):
+    def tile_pattern(self, image, width, height, spacing, offset, rotation, scale, opacity, padding_top=0, padding_right=0, padding_bottom=0, padding_left=0, randomize_scale=0, randomize_rotation=0, randomize_opacity=0, image2=None, image3=None, image4=None):
         # Use PIL implementation directly
-        return self._tile_pattern_pil(image, width, height, spacing, offset, rotation, scale, opacity, randomize_scale, randomize_rotation, randomize_opacity, image2, image3, image4)
+        return self._tile_pattern_pil(image, width, height, spacing, offset, rotation, scale, opacity, padding_top, padding_right, padding_bottom, padding_left, randomize_scale, randomize_rotation, randomize_opacity, image2, image3, image4)
     
     
-    def _tile_pattern_pil(self, image, width, height, spacing, offset, rotation, scale, opacity, randomize_scale, randomize_rotation, randomize_opacity, image2, image3, image4):
+    def _tile_pattern_pil(self, image, width, height, spacing, offset, rotation, scale, opacity, padding_top, padding_right, padding_bottom, padding_left, randomize_scale, randomize_rotation, randomize_opacity, image2, image3, image4):
         """Highly optimized PIL implementation with aggressive performance improvements."""
-        S4ToolLogger.info("ImageTilingPattern", f"Starting tile pattern generation: {width}x{height}")
+        S4ToolLogger.info("ImageTilingPattern", f"Starting tile pattern generation: {width}x{height}, padding: T{padding_top} R{padding_right} B{padding_bottom} L{padding_left}")
         
         # Check for simple static case - if no randomization (rotation is OK for static)
         is_static = (randomize_scale == 0 and randomize_rotation == 0 and randomize_opacity == 0)
@@ -82,12 +86,18 @@ class ImageTilingPattern:
         # Prepare output canvas (transparent)
         pattern = Image.new('RGBA', (width, height), (0, 0, 0, 0))
 
-        # Calculate tiling bounds to ensure coverage from (0,0)
-        # Start from negative indices to cover the canvas from top-left
-        start_col = int((-offset_x - base_w) / step_x) - 1
-        end_col = int(np.ceil((width + base_w + offset_x) / step_x)) + 1
-        start_row = -1  # Always start one row before to ensure coverage
-        end_row = int(np.ceil((height + base_h) / step_y)) + 1
+        # Calculate effective tiling area considering padding
+        tile_start_x = padding_left
+        tile_end_x = width - padding_right
+        tile_start_y = padding_top
+        tile_end_y = height - padding_bottom
+        
+        # Calculate tiling bounds within the padded area
+        # Adjust starting position based on padding
+        start_col = int((tile_start_x - offset_x - base_w) / step_x) - 1
+        end_col = int(np.ceil((tile_end_x + base_w + offset_x) / step_x)) + 1
+        start_row = int((tile_start_y - base_h) / step_y) - 1
+        end_row = int(np.ceil((tile_end_y + base_h) / step_y)) + 1
         
         total_tiles = (end_row - start_row) * (end_col - start_col)
         S4ToolLogger.info("ImageTilingPattern", f"Tiling grid: rows {start_row}-{end_row}, cols {start_col}-{end_col}, total: {total_tiles} tiles")
@@ -98,11 +108,11 @@ class ImageTilingPattern:
             # Reduce tile density by increasing step size
             step_x = int(step_x * 1.5)
             step_y = int(step_y * 1.5)
-            # Recalculate bounds with new step sizes
-            start_col = int((-offset_x - base_w) / step_x) - 1
-            end_col = int(np.ceil((width + base_w + offset_x) / step_x)) + 1
-            start_row = -1  # Always start one row before to ensure coverage
-            end_row = int(np.ceil((height + base_h) / step_y)) + 1
+            # Recalculate bounds with new step sizes (respecting padding)
+            start_col = int((tile_start_x - offset_x - base_w) / step_x) - 1
+            end_col = int(np.ceil((tile_end_x + base_w + offset_x) / step_x)) + 1
+            start_row = int((tile_start_y - base_h) / step_y) - 1
+            end_row = int(np.ceil((tile_end_y + base_h) / step_y)) + 1
             total_tiles = (end_row - start_row) * (end_col - start_col)
             S4ToolLogger.info("ImageTilingPattern", f"Reduced to {total_tiles} tiles for performance")
         
@@ -119,30 +129,10 @@ class ImageTilingPattern:
                 if base_w != orig_w or base_h != orig_h:
                     transformed = transformed.resize((base_w, base_h), Image.BICUBIC)
                 
-                # Apply rotation if needed - keep original size
+                # Apply rotation if needed - expand to fit rotated image
                 if abs(rotation) > 0.1:
-                    orig_w_t, orig_h_t = transformed.size
-                    
-                    # Create a larger canvas for rotation to avoid clipping
-                    diagonal = int(np.sqrt(orig_w_t**2 + orig_h_t**2)) + 2
-                    canvas_size = max(diagonal, orig_w_t + 20, orig_h_t + 20)
-                    
-                    # Create transparent canvas and paste tile at center
-                    canvas = Image.new('RGBA', (canvas_size, canvas_size), (0, 0, 0, 0))
-                    paste_x = (canvas_size - orig_w_t) // 2
-                    paste_y = (canvas_size - orig_h_t) // 2
-                    canvas.paste(transformed, (paste_x, paste_y), transformed)
-                    
-                    # Rotate the canvas
-                    rotated_canvas = canvas.rotate(rotation, resample=Image.BICUBIC)
-                    
-                    # Crop back to original size from center
-                    crop_x = (rotated_canvas.width - orig_w_t) // 2
-                    crop_y = (rotated_canvas.height - orig_h_t) // 2
-                    transformed = rotated_canvas.crop((
-                        crop_x, crop_y, 
-                        crop_x + orig_w_t, crop_y + orig_h_t
-                    ))
+                    # Rotate with expand=True to avoid cropping
+                    transformed = transformed.rotate(rotation, resample=Image.BICUBIC, expand=True)
                 
                 static_images.append(transformed)
             pil_images = static_images
@@ -168,9 +158,9 @@ class ImageTilingPattern:
             for col in range(start_col, end_col, skip_factor):
                 x = col * step_x + row_offset_x
                 
-                # Aggressive culling: skip tiles completely outside canvas
-                if (x + base_w < 0 or y + base_h < 0 or 
-                    x >= width or y >= height):
+                # Aggressive culling: skip tiles outside padded area
+                if (x + base_w < tile_start_x or y + base_h < tile_start_y or 
+                    x >= tile_end_x or y >= tile_end_y):
                     tile_index += 1
                     processed_tiles += 1
                     continue
@@ -225,31 +215,10 @@ class ImageTilingPattern:
                             th = max(1, int(round(src_pil.height * tile_scale)))
                             tile_img = tile_img.resize((tw, th), Image.BICUBIC)
                         
-                        # Rotate if needed - keep original size for alignment
+                        # Rotate if needed - expand to fit rotated image
                         if abs(tile_rotation) > 0.1:
-                            # Get original dimensions before rotation
-                            orig_tile_w, orig_tile_h = tile_img.size
-                            
-                            # Create a larger canvas for rotation to avoid clipping
-                            diagonal = int(np.sqrt(orig_tile_w**2 + orig_tile_h**2)) + 2
-                            canvas_size = max(diagonal, orig_tile_w + 20, orig_tile_h + 20)
-                            
-                            # Create transparent canvas and paste tile at center
-                            canvas = Image.new('RGBA', (canvas_size, canvas_size), (0, 0, 0, 0))
-                            paste_x = (canvas_size - orig_tile_w) // 2
-                            paste_y = (canvas_size - orig_tile_h) // 2
-                            canvas.paste(tile_img, (paste_x, paste_y), tile_img)
-                            
-                            # Rotate the canvas
-                            rotated_canvas = canvas.rotate(tile_rotation, resample=Image.BICUBIC)
-                            
-                            # Crop back to original size from center
-                            crop_x = (rotated_canvas.width - orig_tile_w) // 2
-                            crop_y = (rotated_canvas.height - orig_tile_h) // 2
-                            tile_img = rotated_canvas.crop((
-                                crop_x, crop_y, 
-                                crop_x + orig_tile_w, crop_y + orig_tile_h
-                            ))
+                            # Rotate with expand=True to avoid cropping
+                            tile_img = tile_img.rotate(tile_rotation, resample=Image.BICUBIC, expand=True)
                         
                         # Apply opacity if needed
                         if tile_opacity < 0.99:
